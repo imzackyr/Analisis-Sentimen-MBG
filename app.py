@@ -35,7 +35,6 @@ PLATFORM_COLORS = {"Twitter": NEUTRAL, "TikTok": ACCENT}
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-
 :root {
     /* Palet minimalis, dark theme, 1 aksen utama + 1 aksen sekunder terbatas:
        hijau (--green) = aksen utama, dipakai konsisten di seluruh UI (gizi & pertumbuhan)
@@ -69,11 +68,25 @@ header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] svg {
     color: var(--text) !important;
     fill: var(--text) !important;
 }
+/* Sembunyikan teks mentah ikon Material Symbols yang gagal render */
 [data-testid="stIconMaterial"] {
-    font-family: 'Material Symbols Rounded' !important;
-    font-feature-settings: 'liga' !important;
-    -webkit-font-feature-settings: 'liga' !important;
-    font-size: 1.25rem !important;
+    font-size: 0 !important;
+    color: transparent !important;
+}
+[data-testid="stIconMaterial"]::after {
+    font-family: Arial, sans-serif !important;
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+/* Tombol TUTUP sidebar (di dalam sidebar) → panah kiri */
+section[data-testid="stSidebar"] [data-testid="stIconMaterial"]::after {
+    content: "«";
+}
+
+/* Tombol BUKA sidebar (muncul saat sidebar tertutup) → panah kanan */
+[data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"]::after {
+    content: "»";
 }
 .block-container { padding:1rem 2rem 4rem !important; max-width:1400px; }
 
