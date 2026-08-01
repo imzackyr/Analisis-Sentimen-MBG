@@ -69,6 +69,12 @@ header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] svg {
     color: var(--text) !important;
     fill: var(--text) !important;
 }
+[data-testid="stIconMaterial"] {
+    font-family: 'Material Symbols Rounded' !important;
+    font-feature-settings: 'liga' !important;
+    -webkit-font-feature-settings: 'liga' !important;
+    font-size: 1.25rem !important;
+}
 .block-container { padding:1rem 2rem 4rem !important; max-width:1400px; }
 
 /* NAVBAR */
