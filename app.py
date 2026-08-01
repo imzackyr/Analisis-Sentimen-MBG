@@ -68,6 +68,43 @@ header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] svg {
     color: var(--text) !important;
     fill: var(--text) !important;
 }
+/* Tombol TUTUP sidebar (saat sidebar terbuka) */
+button[aria-label="Close sidebar"],
+button[aria-label="Collapse sidebar"] {
+    font-size: 0 !important;
+    color: transparent !important;
+    position: relative;
+}
+button[aria-label="Close sidebar"]::after,
+button[aria-label="Collapse sidebar"]::after {
+    content: "«";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: Arial, sans-serif !important;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--green) !important;
+}
+
+/* Tombol BUKA sidebar (saat sidebar tertutup) */
+button[aria-label="Open sidebar"],
+button[aria-label="Expand sidebar"] {
+    font-size: 0 !important;
+    color: transparent !important;
+    position: relative;
+}
+button[aria-label="Open sidebar"]::after,
+button[aria-label="Expand sidebar"]::after {
+    content: "»";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: Arial, sans-serif !important;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--green) !important;
+}
 .block-container { padding:1rem 2rem 4rem !important; max-width:1400px; }
 
 /* NAVBAR */
