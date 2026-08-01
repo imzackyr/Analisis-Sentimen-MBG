@@ -69,6 +69,9 @@ header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] svg {
     color: var(--text) !important;
     fill: var(--text) !important;
 }
+[data-testid="stIconMaterial"] {
+    font-family: 'Material Symbols Outlined' !important;
+}
 .block-container { padding:1rem 2rem 4rem !important; max-width:1400px; }
 
 /* NAVBAR */
