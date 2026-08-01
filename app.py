@@ -60,7 +60,15 @@ html, body, [class*="css"] { font-family:'Plus Jakarta Sans', sans-serif; }
 ::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:var(--bg); }
 ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
-#MainMenu, footer, header { visibility:hidden; }
+#MainMenu, footer { visibility:hidden; }
+header[data-testid="stHeader"] {
+    background: transparent;
+}
+header[data-testid="stHeader"] button[kind="header"] svg,
+header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] svg {
+    color: var(--text) !important;
+    fill: var(--text) !important;
+}
 .block-container { padding:1rem 2rem 4rem !important; max-width:1400px; }
 
 /* NAVBAR */
