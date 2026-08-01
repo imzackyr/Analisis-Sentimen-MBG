@@ -68,25 +68,33 @@ header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] svg {
     color: var(--text) !important;
     fill: var(--text) !important;
 }
-/* Sembunyikan teks mentah ikon Material Symbols yang gagal render */
+/* Sembunyikan teks/ikon asli yang gagal render */
 [data-testid="stIconMaterial"] {
     font-size: 0 !important;
     color: transparent !important;
 }
-[data-testid="stIconMaterial"]::after {
+
+/* Semua tombol collapse/expand sidebar → dikasih panah manual + warna kontras */
+button[kind="header"],
+[data-testid="stSidebarCollapsedControl"] button,
+[data-testid="stSidebar"] button[data-testid="stBaseButton-header"] {
+    position: relative;
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+}
+
+button[kind="header"]::after,
+[data-testid="stSidebarCollapsedControl"] button::after,
+[data-testid="stSidebar"] button[data-testid="stBaseButton-header"]::after {
+    content: "☰";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     font-family: Arial, sans-serif !important;
-    font-size: 1.1rem;
-    color: var(--text);
-}
-
-/* Tombol TUTUP sidebar (di dalam sidebar) → panah kiri */
-section[data-testid="stSidebar"] [data-testid="stIconMaterial"]::after {
-    content: "«";
-}
-
-/* Tombol BUKA sidebar (muncul saat sidebar tertutup) → panah kanan */
-[data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"]::after {
-    content: "»";
+    font-size: 1.2rem;
+    color: var(--green) !important;
+    font-weight: bold;
 }
 .block-container { padding:1rem 2rem 4rem !important; max-width:1400px; }
 
