@@ -84,7 +84,7 @@ button[data-testid="stBaseButton-headerNoPadding"]::after {
     font-family: Arial, sans-serif !important;
     font-size: 1.2rem;
     font-weight: bold;
-    color: var(--green) !important;
+    color: var(--grey) !important;
 }
 
 /* Kondisi sidebar TERTUTUP → panah dibalik ke kanan */
