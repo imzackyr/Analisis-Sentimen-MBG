@@ -1,8 +1,0 @@
-streamlit
-pandas
-plotly
-nltk
-emoji
-joblib
-Sastrawi
-scikit-learn
