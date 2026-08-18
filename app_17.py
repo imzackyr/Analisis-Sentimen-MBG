@@ -66,37 +66,10 @@ html, body, [class*="css"] { font-family:'Plus Jakarta Sans', sans-serif; }
 ::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:var(--bg); }
 ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
-#MainMenu, footer, header { visibility:visible; }
-header[data-testid="stHeader"] {
-    background: transparent;
-}
-
-/* Sembunyikan ikon asli (teks mentah Material Symbols) */
-button[data-testid="stBaseButton-headerNoPadding"] span[data-testid="stIconMaterial"] {
-    display: none !important;
-}
-
-/* Tombol jadi anchor buat naro panah manual */
-button[data-testid="stBaseButton-headerNoPadding"] {
-    position: relative;
-    min-width: 1.6rem;
-    min-height: 1.6rem;
-}
-button[data-testid="stBaseButton-headerNoPadding"]::after {
-    content: "«";
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: Arial, sans-serif !important;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--grey) !important;
-}
-
-/* Kondisi sidebar TERTUTUP → panah dibalik ke kanan */
-[data-testid="stSidebarCollapsedControl"] button[data-testid="stBaseButton-headerNoPadding"]::after {
-    content: "»";
-}
+#MainMenu { visibility:hidden; }
+footer { visibility:hidden; }
+.stDeployButton { display:none; }
+[data-testid="stToolbarActions"] { display:none; }
 .block-container { padding:1rem 2rem 4rem !important; max-width:1400px; }
 
 /* NAVBAR */
@@ -512,7 +485,7 @@ if page == "🏠 Ringkasan":
     hero(
         "Analisis Sentimen Publik · Skripsi",
         "Apakah MBG berpotensi menjadi upaya <em>pencegahan stunting</em>?",
-        "Dashboard ini menyajikan bukti kuantitatif dari 19.728 unggahan Twitter dan TikTok "
+        f"Dashboard ini menyajikan bukti kuantitatif dari {len(df_all):,} unggahan Twitter dan TikTok "
         "untuk menjawab keterkaitan antara persepsi publik terhadap Program Makan Bergizi Gratis "
         "dengan tujuan pencegahan stunting.",
     )
@@ -684,9 +657,10 @@ elif page == "🤖 Performa Model":
     info_card(
         "Catatan Teknis", variant="neutral",
         text=f"Model mencapai <b>akurasi {metrics_map.get('Accuracy','-')}</b> pada klasifikasi 2 kelas (Positif/Negatif). "
-             "Data training di-balancing dengan <b>SMOTE</b> pada kelas minoritas (Positif) sebelum training, "
-             "sehingga model tidak bias ke kelas mayoritas — konsisten dengan karakteristik data media sosial "
-             "yang secara alami tidak seimbang antar kelas.",
+             "Data asli timpang cukup berat ke arah Positif, sehingga data training di-balancing dengan <b>SMOTE</b> "
+             "yang diarahkan agar kelas <b>Negatif menjadi dominan</b> (bukan sekadar seimbang 50:50) — sesuai arahan "
+             "dosen pembimbing, supaya model lebih peka mendeteksi sentimen Negatif. Konsekuensinya, recall kelas "
+             "Negatif jadi jauh lebih tinggi, dengan trade-off precision Negatif dan akurasi keseluruhan yang lebih rendah.",
     )
 
     footer()
