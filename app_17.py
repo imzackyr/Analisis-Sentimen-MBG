@@ -1,6 +1,5 @@
 """
 Dashboard Analisis Sentimen Program MBG (Makan Bergizi Gratis)
-sebagai Upaya Pencegahan Stunting
 """
 
 import re
@@ -278,7 +277,7 @@ def footer():
     <hr class="div">
     <div class="footer">
         MBG Sentiment Dashboard &nbsp;·&nbsp; Tugas Akhir / Skripsi &nbsp;·&nbsp;
-        Analisis Sentimen Program Makan Bergizi Gratis terhadap Pencegahan Stunting<br>
+        Analisis Sentimen Program Makan Bergizi Gratis<br>
         Data: Twitter & TikTok &nbsp;·&nbsp; Model: TF-IDF + Naive Bayes &nbsp;·&nbsp; Labeling: Lexicon-based
     </div>""", unsafe_allow_html=True)
 
@@ -434,7 +433,7 @@ PAGES = [
     "📊 Distribusi Sentimen",
     "🔑 Kata Kunci & Topik",
     "🤖 Performa Model",
-    "🎯 Bukti: MBG & Stunting",
+    "🎯 Bukti: Dukungan Publik MBG",
     "🔍 Jelajah Data",
     "✍️ Uji Coba Sentimen",  # 🔧 REVISI: halaman baru
 ]
@@ -484,10 +483,9 @@ def keyword_mask(frame, pattern):
 if page == "🏠 Ringkasan":
     hero(
         "Analisis Sentimen Publik · Skripsi",
-        "Apakah MBG berpotensi menjadi upaya <em>pencegahan stunting</em>?",
+        "Bagaimana Persepsi Publik terhadap Program <em>MBG</em>?",
         f"Dashboard ini menyajikan bukti kuantitatif dari {len(df_all):,} unggahan Twitter dan TikTok "
-        "untuk menjawab keterkaitan antara persepsi publik terhadap Program Makan Bergizi Gratis "
-        "dengan tujuan pencegahan stunting.",
+        "untuk menganalisis sentimen publik terhadap Program Makan Bergizi Gratis (MBG).",
     )
 
     stat_strip([
@@ -597,8 +595,8 @@ elif page == "🔑 Kata Kunci & Topik":
                 st.markdown('</div>', unsafe_allow_html=True)
 
     with tabs[1]:
-        sec("Telusuri Sentimen Berdasarkan Kata Kunci", "Coba kata seperti: stunting, gizi, racun, korupsi, dukung.")
-        kw = st.text_input("Kata kunci", value="stunting", label_visibility="collapsed")
+        sec("Telusuri Sentimen Berdasarkan Kata Kunci", "Coba kata seperti: gizi, gratis, racun, korupsi, dukung.")
+        kw = st.text_input("Kata kunci", value="gizi", label_visibility="collapsed")
         if kw:
             sub = df[keyword_mask(df, re.escape(kw))]
             st.markdown(f"Ditemukan **{len(sub):,}** data yang mengandung **'{kw}'**.")
@@ -666,25 +664,25 @@ elif page == "🤖 Performa Model":
     footer()
 
 # ==================================================================
-# PAGE 5 — BUKTI: MBG & STUNTING
+# PAGE 5 — BUKTI: DUKUNGAN PUBLIK MBG
 # ==================================================================
-elif page == "🎯 Bukti: MBG & Stunting":
+elif page == "🎯 Bukti: Dukungan Publik MBG":
     hero(
         "Bukti Kuantitatif · Rumusan Masalah Skripsi",
-        "Sentimen Publik Mendukung MBG sebagai Upaya <em>Pencegahan Stunting</em>",
-        "Rangkuman bukti dari analisis sentimen 19.728 unggahan Twitter & TikTok yang menjawab keterkaitan "
-        "antara persepsi publik dan tujuan gizi/stunting Program MBG.",
+        "Sentimen Publik Mendukung Program <em>MBG</em>",
+        "Rangkuman bukti dari analisis sentimen unggahan Twitter & TikTok terhadap "
+        "Program Makan Bergizi Gratis (MBG).",
         emoji="🎯",
     )
 
     baseline_vc, baseline_pct = sentiment_pct(df_all)
     kw_defs = {
-        "Menyebut 'stunting'": r"\bstunting\b",
+        "Menyebut 'gratis'": r"\bgratis\b",
         "Menyebut 'gizi' / 'bergizi'": r"\bgizi\b|\bbergizi\b",
         "Menyebut 'anak' / 'balita'": r"\banak\b|\bbalita\b",
     }
 
-    sec("1. Sentimen Lebih Positif pada Topik Gizi & Stunting", "Dibandingkan dengan rata-rata keseluruhan data (baseline).")
+    sec("1. Sentimen Lebih Positif pada Topik Gizi & Manfaat Program", "Dibandingkan dengan rata-rata keseluruhan data (baseline).")
     rows = []
     for label, pattern in kw_defs.items():
         sub = df_all[keyword_mask(df_all, pattern)]
@@ -703,20 +701,20 @@ elif page == "🎯 Bukti: MBG & Stunting":
         fig.update_layout(barmode="stack", yaxis_title="Persentase (%)", xaxis_title="", legend=dict(orientation="h", y=1.2))
         st.plotly_chart(themed(fig, 260), use_container_width=True)
 
-    stunting_pct = comp_df.loc[comp_df["Segmen"] == "Menyebut 'stunting'", "% Positif"].values[0]
+    gratis_pct = comp_df.loc[comp_df["Segmen"] == "Menyebut 'gratis'", "% Positif"].values[0]
     gizi_pct = comp_df.loc[comp_df["Segmen"] == "Menyebut 'gizi' / 'bergizi'", "% Positif"].values[0]
-    n_stunting = int(comp_df.loc[comp_df["Segmen"] == "Menyebut 'stunting'", "N"].values[0])
+    n_gratis = int(comp_df.loc[comp_df["Segmen"] == "Menyebut 'gratis'", "N"].values[0])
 
     info_card(
         "Temuan", text=(
-            f"Dari {n_stunting} unggahan yang secara eksplisit menyebut kata <b>'stunting'</b>, "
-            f"<b>{stunting_pct}% berlabel Positif</b> — jauh di atas rata-rata Positif seluruh data ({baseline_pct['Positif']}%). "
+            f"Dari {n_gratis} unggahan yang secara eksplisit menyebut kata <b>'gratis'</b>, "
+            f"<b>{gratis_pct}% berlabel Positif</b> — jauh di atas rata-rata Positif seluruh data ({baseline_pct['Positif']}%). "
             f"Unggahan bertopik <b>gizi/bergizi</b> juga konsisten lebih positif ({gizi_pct}%) dibanding baseline. "
-            "Publik yang secara spesifik mengaitkan MBG dengan gizi dan stunting menilainya lebih positif."
+            "Publik yang secara spesifik mengaitkan MBG dengan manfaat gizi dan aksesnya yang gratis menilainya lebih positif."
         ),
     )
 
-    sec("2. Sentimen Negatif Bersumber dari Isu Operasional", "Bukan penolakan terhadap konsep gizi/pencegahan stunting itu sendiri.")
+    sec("2. Sentimen Negatif Bersumber dari Isu Operasional", "Bukan penolakan terhadap konsep program MBG itu sendiri.")
     c1, c2 = st.columns(2)
     with c1:
         st.markdown(f'<div class="panel-card"><div class="panel-title" style="color:{SENT_COLORS["Negatif"]}">Top Kata — Negatif</div>', unsafe_allow_html=True)
@@ -731,8 +729,8 @@ elif page == "🎯 Bukti: MBG & Stunting":
         "Temuan", text=(
             "Kata-kata dominan pada sentimen Negatif mengarah pada isu <b>operasional/teknis</b> "
             "(dugaan keracunan, korupsi, dapur/BGN ditutup, kesalahan distribusi) — <b>bukan</b> penolakan terhadap gagasan "
-            "'makan bergizi untuk cegah stunting'. Kata dominan pada sentimen Positif ('gizi', 'sehat', 'manfaat', 'dukung') "
-            "justru selaras langsung dengan tujuan pencegahan stunting."
+            "program 'makan bergizi gratis' itu sendiri. Kata dominan pada sentimen Positif ('gizi', 'sehat', 'manfaat', 'dukung') "
+            "justru selaras langsung dengan tujuan program."
         ),
     )
 
@@ -751,19 +749,18 @@ elif page == "🎯 Bukti: MBG & Stunting":
         "Sintesis Temuan", variant="warn", text=(
             f"Berdasarkan {len(df_all):,} unggahan Twitter & TikTok yang dianalisis dengan model beraskurasi "
             f"{metrics_map.get('Accuracy','')}, data sentimen publik secara konsisten menunjukkan bahwa "
-            f"<b>diskusi yang secara eksplisit mengaitkan MBG dengan gizi dan stunting menghasilkan sentimen jauh lebih positif "
-            f"({stunting_pct}%) dibanding rata-rata keseluruhan ({baseline_pct['Positif']}%)</b>, dan sentimen negatif yang muncul "
-            "terpusat pada masalah pelaksanaan teknis — bukan pada penolakan terhadap tujuan gizi program. "
-            "<b>Temuan ini mendukung argumen bahwa program MBG dipersepsikan publik sebagai upaya yang relevan "
-            "untuk pencegahan stunting</b>, dengan keberhasilan implementasinya bergantung pada perbaikan aspek operasional."
+            f"<b>diskusi yang secara eksplisit mengaitkan MBG dengan manfaat gizi menghasilkan sentimen jauh lebih positif "
+            f"({gratis_pct}%) dibanding rata-rata keseluruhan ({baseline_pct['Positif']}%)</b>, dan sentimen negatif yang muncul "
+            "terpusat pada masalah pelaksanaan teknis — bukan pada penolakan terhadap tujuan program. "
+            "<b>Temuan ini mendukung argumen bahwa program MBG dipersepsikan publik secara positif</b>, dengan "
+            "keberhasilan implementasinya bergantung pada perbaikan aspek operasional."
         ),
     )
     info_card(
         "Ruang Lingkup Penelitian", variant="neutral", text=(
             "Temuan ini didasarkan pada analisis sentimen opini publik di media sosial, digunakan sebagai indikator "
-            "persepsi masyarakat terhadap tujuan gizi/stunting dari program MBG. Untuk menilai dampak gizi-klinis aktual "
-            "terhadap prevalensi stunting, temuan ini idealnya dilengkapi data epidemiologis resmi (mis. Survei Status Gizi "
-            "Indonesia/SSGI) sebagai data pendukung eksternal."
+            "persepsi masyarakat terhadap Program MBG. Untuk menilai dampak gizi-klinis aktual dari program ini, "
+            "temuan ini idealnya dilengkapi data epidemiologis resmi sebagai data pendukung eksternal."
         ),
     )
 
@@ -828,7 +825,7 @@ elif page == "✍️ Uji Coba Sentimen":
         sec("Masukkan Teks", "Bisa berupa komentar, tweet, atau opini bebas berbahasa Indonesia.")
         user_text = st.text_area(
             "Teks",
-            placeholder="Contoh: menurut saya program mbg ini sangat membantu anak-anak biar gak stunting",
+            placeholder="Contoh: menurut saya program mbg ini sangat membantu anak-anak dapet makanan bergizi",
             height=120,
             label_visibility="collapsed",
         )
