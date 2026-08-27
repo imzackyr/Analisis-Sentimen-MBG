@@ -26,8 +26,9 @@ st.set_page_config(
 )
 
 # 🔧 REVISI: sentimen sekarang 2 kategori saja (Positif & Negatif)
-SENT_COLORS = {"Positif": "#92d05d", "Negatif": "#f87171"}
-SENT_ORDER = ["Positif", "Negatif"]
+# 🔧 REVISI: balik ke 3 kategori sentimen (Positif / Netral / Negatif)
+SENT_COLORS = {"Positif": "#92d05d", "Netral": "#8fa4bd", "Negatif": "#f87171"}
+SENT_ORDER = ["Positif", "Netral", "Negatif"]
 
 ACCENT = "#92d05d"      # aksen utama — dipakai konsisten di seluruh dashboard
 ACCENT2 = "#d1b06c"     # aksen sekunder — dipakai terbatas untuk highlight khusus
@@ -343,7 +344,7 @@ SLANG_DICT = {
     'bgizi': 'bergizi', 'bergizii': 'bergizi', 'gizii': 'gizi',
     'ank': 'anak', 'anak2': 'anak', 'anak²': 'anak',
     'sklh': 'sekolah', 'sekolahan': 'sekolah', 'gratisan': 'gratis',
-    'stuntingnya': 'stunting', 'pemrintah': 'pemerintah',
+    'pemrintah': 'pemerintah',  # 🔧 REVISI: entry 'stuntingnya' dihapus, sinkron sama notebook
 }
 
 # --- B.15 Stopword removal: keep_words & custom_stopwords (identik dengan notebook) ---
@@ -351,7 +352,7 @@ KEEP_WORDS = {
     'tidak', 'tak', 'bukan', 'belum', 'jangan', 'kurang',
     'tapi', 'namun', 'meski', 'walaupun',
     'sangat', 'banget', 'sekali',
-    'mbg', 'makan', 'makanan', 'bergizi', 'gizi', 'gratis', 'program', 'stunting',
+    'mbg', 'makan', 'makanan', 'bergizi', 'gizi', 'gratis', 'program',  # 🔧 REVISI: 'stunting' dihapus, sinkron sama notebook
     'anak', 'siswa', 'pelajar', 'sekolah',
     'pemerintah', 'presiden', 'prabowo',
     'indonesia',
@@ -537,9 +538,9 @@ elif page == "📊 Distribusi Sentimen":
     vc, pct = sentiment_pct(df)
     stat_strip([
         (f"{pct['Positif']}%", f"Positif · {int(vc['Positif']):,} data", SENT_COLORS["Positif"]),
+        (f"{pct['Netral']}%", f"Netral · {int(vc['Netral']):,} data", SENT_COLORS["Netral"]),  # 🔧 REVISI: tambah kembali kartu Netral
         (f"{pct['Negatif']}%", f"Negatif · {int(vc['Negatif']):,} data", SENT_COLORS["Negatif"]),
         (f"{len(df):,}", "Total (sesuai filter)", NEUTRAL),
-        (f"{(df['platform']=='TikTok').sum():,}", "Data TikTok (sesuai filter)", NEUTRAL),
     ])
 
     sec("Proporsi Sentimen Keseluruhan")
@@ -587,7 +588,7 @@ elif page == "🔑 Kata Kunci & Topik":
 
     with tabs[0]:
         sec("Top 10 Kata per Kategori Sentimen")
-        cols = st.columns(2)
+        cols = st.columns(3)  # 🔧 REVISI: balik ke 3 kolom (Positif/Netral/Negatif)
         for c, s in zip(cols, SENT_ORDER):
             with c:
                 st.markdown(f'<div class="panel-card"><div class="panel-title" style="color:{SENT_COLORS[s]}">{s}</div>', unsafe_allow_html=True)
@@ -654,11 +655,10 @@ elif page == "🤖 Performa Model":
 
     info_card(
         "Catatan Teknis", variant="neutral",
-        text=f"Model mencapai <b>akurasi {metrics_map.get('Accuracy','-')}</b> pada klasifikasi 2 kelas (Positif/Negatif). "
-             "Data asli timpang cukup berat ke arah Positif, sehingga data training di-balancing dengan <b>SMOTE</b> "
-             "yang diarahkan agar kelas <b>Negatif menjadi dominan</b> (bukan sekadar seimbang 50:50) — sesuai arahan "
-             "dosen pembimbing, supaya model lebih peka mendeteksi sentimen Negatif. Konsekuensinya, recall kelas "
-             "Negatif jadi jauh lebih tinggi, dengan trade-off precision Negatif dan akurasi keseluruhan yang lebih rendah.",
+        text=f"Model mencapai <b>akurasi {metrics_map.get('Accuracy','-')}</b> pada klasifikasi 3 kelas "  # 🔧 REVISI: 3 kelas, tanpa SMOTE
+             "(Positif/Netral/Negatif). Model dilatih langsung dari distribusi data asli tanpa teknik balancing "
+             "tambahan (SMOTE), sehingga hasil evaluasi merepresentasikan performa model pada distribusi sentimen "
+             "publik yang sebenarnya.",
     )
 
     footer()
@@ -687,8 +687,8 @@ elif page == "🎯 Bukti: Dukungan Publik MBG":
     for label, pattern in kw_defs.items():
         sub = df_all[keyword_mask(df_all, pattern)]
         vc_k, pct_k = sentiment_pct(sub)
-        rows.append({"Segmen": label, "N": len(sub), "% Positif": pct_k["Positif"], "% Negatif": pct_k["Negatif"]})
-    rows.append({"Segmen": "Baseline (seluruh data)", "N": len(df_all), "% Positif": baseline_pct["Positif"], "% Negatif": baseline_pct["Negatif"]})
+        rows.append({"Segmen": label, "N": len(sub), "% Positif": pct_k["Positif"], "% Netral": pct_k["Netral"], "% Negatif": pct_k["Negatif"]})  # 🔧 REVISI: tambah kembali % Netral
+    rows.append({"Segmen": "Baseline (seluruh data)", "N": len(df_all), "% Positif": baseline_pct["Positif"], "% Netral": baseline_pct["Netral"], "% Negatif": baseline_pct["Negatif"]})
     comp_df = pd.DataFrame(rows)
 
     col1, col2 = st.columns([1, 1.3])
